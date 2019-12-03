@@ -264,8 +264,10 @@ function blockreference_field_widget_form(&$form, &$form_state, $field, $instanc
       $ac_string = '';
       if (!empty($items[$delta])) {
         $item = $items[$delta];
-        list($module, $delta) = explode(':', $item['moddelta']);
-        $ac_string = _blockreference_block_string(_blockreference_block($module, $delta));
+        if (!empty($item['moddelta'])) {
+          list($module, $delta) = explode(':', $item['moddelta']);
+          $ac_string = _blockreference_block_string(_blockreference_block($module, $delta));
+        }
       }
 
       $element += array(
