@@ -21,7 +21,7 @@ function blockreference_menu() {
 }
 
 /**
- * Menu access callback for the autocomplete path.
+ * Access callback for the autocomplete path.
  */
 function blockreference_autocomplete_access($entity_type, $bundle, $field_name, $eid) {
   if ($eid == 0) {
@@ -29,18 +29,18 @@ function blockreference_autocomplete_access($entity_type, $bundle, $field_name, 
     $entity_dummy = entity_create($entity_type, array(
       $entity_info['entity keys']['bundle'] => $bundle,
     ));
-    if (function_exists($entity_type . '_access')) {
-      $entity_access = call_user_func($entity_type . '_access', 'create', $entity_dummy);
-    }
+
+    global $user;
+    $entity_access = $entity_dummy->access('create', $user);
   }
   else {
-    $entity = entity_load($entity_type, array($eid));
-    $entity = reset($entity) ?: FALSE;
+    $entities = entity_load($entity_type, array($eid));
+    $entity = reset($entities) ?: FALSE;
 
-    if (function_exists($entity_type . '_access')) {
-      $entity_access = call_user_func($entity_type . '_access', 'update', $entity);
-    }
+    global $user;
+    $entity_access = $entity->access('update', $user);
   }
+
   return user_access('access content') && $entity_access;
 }
 
