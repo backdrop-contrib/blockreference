@@ -46,7 +46,7 @@ https://github.com/backdrop-contrib/blockreference/issues
 Current Maintainers
 -------------------
 
-- opi (https://github.com/opi)
+- [Martin Price](https://github.com/yorkshire-pudding) - [System Horizons](https://www.systemhorizons.co.uk)
 
 Credits
 -------
