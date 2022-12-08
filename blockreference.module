@@ -73,7 +73,7 @@ function blockreference_autocomplete($entity_type, $bundle, $field_name, $entity
 /**
  * Value callback for a blockreference autocomplete element.
  */
-function blockreference_autocomplete_value($element, $input = FALSE, $form_state) {
+function blockreference_autocomplete_value($element, $input = FALSE, $form_state = array()) {
   $ac_string = $input !== FALSE ? $input : (isset($element['#value']) ? $element['#value'] : (string) @$element['#default_value']);
 
   $module = $delta = '';
