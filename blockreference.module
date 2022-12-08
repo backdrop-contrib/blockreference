@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * The main module file for Block Reference.
+ */
 
 define('BLOCKREFERENCE_AC_REGEX', '#\[([\w\-]+):([\w\-]+)\]$#');
 
@@ -119,7 +123,10 @@ function blockreference_autocomplete_validate($element, &$form_state, $form) {
   }
 
   // Validate block's usage in this context.
-  $allowed_blocks = _blockreference_find_blocks($instance, '', array('entity' => $element['#entity'], 'type' => 'autocomplete'));
+  $allowed_blocks = _blockreference_find_blocks($instance, '', array(
+    'entity' => $element['#entity'],
+    'type' => 'autocomplete',
+  ));
   $moddelta = implode(':', $block_arr);
   if (!isset($allowed_blocks[$moddelta])) {
     return form_error($element, t('This block is not allowed in this field/context.'));
@@ -147,7 +154,7 @@ function blockreference_theme() {
     ),
     'blockreference_formatter_config_link' => array(
       'variables' => array('element' => NULL),
-    )
+    ),
   );
 }
 
@@ -262,7 +269,7 @@ function theme_blockreference_formatter_config_link($variables) {
 function _blockreference_get_block_modules_from_field($instance, $field = NULL) {
   $modules = @$instance['settings']['blockreference_modules'];
   if (!$modules) {
-    $field or $field = field_info_field($instance['field_name']);
+    $field || $field = field_info_field($instance['field_name']);
 
     $modules = @$field['settings']['referenceable_modules'];
   }
@@ -281,7 +288,8 @@ function _blockreference_get_ac_match_method_from_field($instance, $field = NULL
 }
 
 /**
- * Return options list of modules that provide blocks, keyed by module machine name.
+ * Return options list of modules that provide blocks, keyed by module machine
+ * name.
  */
 function _blockreference_get_block_modules() {
   $modules = &backdrop_static(__FUNCTION__);
@@ -346,12 +354,13 @@ function _blockreference_block($module, $delta, $info = NULL) {
 }
 
 /**
- * Helper to find blocks that potentially match a search string, in the right order, altered by custom modules.
+ * Helper to find blocks that potentially match a search string, in the right
+ * order, altered by custom modules.
  */
 function _blockreference_find_blocks($instance, $search_string = '', $context = array()) {
   $all_block_infos = &backdrop_static(__FUNCTION__, array());
 
-  // Generate unique instance id
+  // Generate unique instance id.
   $iid = 'field.instance.' . $instance['entity_type'] . '.' . $instance['bundle'] . '.' . $instance['field_name'];
 
   // Cache ALL potential block objects for this instance.
@@ -442,7 +451,8 @@ function _blockreference_formatter_get_block($element) {
 /**
  * Implements hook_entity_view().
  *
- * Pre-render blockreference fields attached to entities to ensure forms are rendered early enough.
+ * Pre-render blockreference fields attached to entities to ensure forms are
+ * rendered early enough.
  */
 function blockreference_entity_view($entity, $entity_type, $view_mode, $langcode) {
   if (empty($entity->content)) {
@@ -508,8 +518,8 @@ function blockreference_block_usage($module, $delta) {
 
       // Collect entity_type's and entity_id's associatively.
       foreach ($items as $item) {
-        $entity_loads[ $item->entity_type ][] = $item->entity_id;
-        $loads_by_field_name[ $item->entity_type ][ $item->entity_id ][] = $field_name;
+        $entity_loads[$item->entity_type][] = $item->entity_id;
+        $loads_by_field_name[$item->entity_type][$item->entity_id][] = $field_name;
       }
     }
   }
@@ -522,7 +532,7 @@ function blockreference_block_usage($module, $delta) {
       $uri = entity_uri($entity_type, $entity);
       $path = $uri['path'];
       $options = @$uri['options'] ?: array();
-      $fields = $loads_by_field_name[ $entity_type ][ $id ];
+      $fields = $loads_by_field_name[$entity_type][$id];
       $matches[] = l($entity_type . ' # ' . $id, $path, $options) . ' (' . implode(', ', $fields) . ')';
     }
   }
@@ -558,12 +568,15 @@ function _blockreference_entityreference_link_links($entity_type, $moddeltas, $o
   return $links;
 }
 
+/**
+ *
+ */
 function _blockreference_get_renderable_array($block) {
 
   $plugin_name = $block->module . ':' . $block->delta;
   $data = array();
 
-  // Load Block entity
+  // Load Block entity.
   if (!isset($block->class)) {
     $block = new BlockLegacy($plugin_name, $data);
   }
@@ -572,11 +585,11 @@ function _blockreference_get_renderable_array($block) {
 
   }
 
-  // Prepare block
+  // Prepare block.
   $block->prepare();
 
   // Get block content
-  // Copied from layout_renderer_standard.inc
+  // Copied from layout_renderer_standard.inc.
   $content = $block->getContent();
 
   if (is_string($content)) {
@@ -591,7 +604,10 @@ function _blockreference_get_renderable_array($block) {
   );
 
   // Allow altering of the title and content by other modules.
-  backdrop_alter(array('block_view', 'block_view_' . $block->module . '_' . str_replace('-', '_', $block->delta)), $data, $block);
+  backdrop_alter(array(
+    'block_view',
+    'block_view_' . $block->module . '_' . str_replace('-', '_', $block->delta),
+  ), $data, $block);
 
   // Assemble a structured content array.
   $content = (object) array(
@@ -602,6 +618,6 @@ function _blockreference_get_renderable_array($block) {
   return array(
     '#theme' => 'block',
     '#content' => $content,
-    '#block' => $block
+    '#block' => $block,
   );
 }

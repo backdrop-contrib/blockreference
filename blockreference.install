@@ -1,6 +1,5 @@
 <?php
-
 /**
  * @file
- * Block Reference install & updates.
+ * Install, update, and uninstall functions for the Block Reference module.
  */

@@ -1,5 +1,5 @@
 type = module
-name = Block reference
+name = Block Reference
 description = Defines a field type for referencing a block from a node.
 package = Fields
 backdrop = 1.x

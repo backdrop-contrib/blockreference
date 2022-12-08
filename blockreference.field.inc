@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * The field definition for the Block Reference module.
+ */
 
 /**
  * Implements hook_field_info().
@@ -73,7 +77,11 @@ function blockreference_field_formatter_info() {
       'label' => t('Link to configuration'),
       'description' => t('Link to configure the block'),
       'field types' => array('blockreference'),
-      'settings' => array('label' => 'default', 'custom_label' => '', 'destination' => 1),
+      'settings' => array(
+        'label' => 'default',
+        'custom_label' => '',
+        'destination' => 1,
+      ),
     ),
   );
 }
@@ -111,7 +119,13 @@ function blockreference_field_formatter_settings_form($field, $instance, $view_m
     $element['label'] = array(
       '#type' => 'select',
       '#title' => t('Label'),
-      '#options' => backdrop_map_assoc(array('default', 'custom', 'info', 'config', 'rendered')),
+      '#options' => backdrop_map_assoc(array(
+        'default',
+        'custom',
+        'info',
+        'config',
+        'rendered',
+      )),
       '#default_value' => $settings['label'],
       '#attributes' => array('class' => array('blockreference-label-type')),
     );
@@ -142,7 +156,7 @@ function blockreference_field_formatter_settings_form($field, $instance, $view_m
       '#type' => 'checkbox',
       '#title' => t('Show empty blocks?'),
       '#default_value' => $settings['show_empty_blocks'],
-      '#description' => t("Hiding empty blocks (usually a good thing) will move up the rendering process and check its output. If the render moment is important, don't do this.")
+      '#description' => t("Hiding empty blocks (usually a good thing) will move up the rendering process and check its output. If the render moment is important, don't do this."),
     );
 
     return $element;
@@ -170,7 +184,8 @@ function blockreference_field_formatter_view($entity_type, $entity, $field, $ins
       '#element' => $vars,
     );
 
-    // To hide potentially empty/broken/missing block references, pre-render it immediately and check the output.
+    // To hide potentially empty/broken/missing block references, pre-render it
+    // immediately and check the output.
     if (!$display['settings']['show_empty_blocks']) {
       $html = trim(render($element[$delta]));
       if ($html) {

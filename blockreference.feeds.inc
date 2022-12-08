@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Adds support for feeds to Block Reference module.
+ */
 
 /**
  * Implements hook_feeds_processor_targets_alter().
@@ -29,16 +33,16 @@ function blockreference_feeds_processor_targets_alter(&$targets, $entity_type, $
  * user has decided to map to and $value contains the value of the feed item
  * element the user has picked as a source.
  *
- * @param $source
+ * @param object $source
  *   A FeedsSource object.
- * @param $entity
+ * @param Entity $entity
  *   The entity to map to.
- * @param $target
+ * @param string $target
  *   The target key on $entity to map to.
- * @param $value
+ * @param array $value
  *   The value to map. MUST be an array.
  */
-function blockreference_feeds_set_target($source, $entity, $target, $value) {
+function blockreference_feeds_set_target($source, Entity $entity, $target, array $value) {
   // Assume that the passed in value could really be any number of values.
   $values = array_filter((array) $value);
 
@@ -57,7 +61,8 @@ function blockreference_feeds_set_target($source, $entity, $target, $value) {
   foreach ($values as $value) {
     @list($module, $delta) = explode(':', $value);
     if ($module && $delta) {
-      $exists = db_query('SELECT bid FROM {block} WHERE module = ? AND delta = ?', array($module, $delta))->fetchField();
+      $exists = db_query('SELECT bid FROM {block} WHERE module = ? AND delta = ?',
+        array($module, $delta))->fetchField();
       if ($exists) {
         $items[$language][]['moddelta'] = $value;
       }
