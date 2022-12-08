@@ -3,10 +3,6 @@ name = Block Reference
 description = Defines a field type for referencing a block from a node.
 package = Fields
 backdrop = 1.x
-dependencies[] = field
-dependencies[] = options
-dependencies[] = block
-dependencies[] = entity
 
 ; Migrate handler.
 ; TODO use hook_autoload_info
