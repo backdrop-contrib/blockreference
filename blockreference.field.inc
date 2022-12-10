@@ -285,10 +285,16 @@ function blockreference_field_widget_form(&$form, &$form_state, $field, $instanc
         }
       }
 
+      $autocomplete_path = $instance['widget']['settings']['autocomplete_path']
+        . '/' . $instance['entity_type']
+        . '/' . $instance['bundle']
+        . '/' . $instance['field_name']
+        . '/' . (int) $eid;
+
       $element += array(
         '#type' => 'textfield',
         '#default_value' => $ac_string,
-        '#autocomplete_path' => $instance['widget']['settings']['autocomplete_path'] . '/' . $instance['entity_type'] . '/' . $instance['bundle'] . '/' . $instance['field_name'] . '/' . (int) $eid,
+        '#autocomplete_path' => $autocomplete_path,
         '#size' => $instance['widget']['settings']['size'],
         '#element_validate' => array('blockreference_autocomplete_validate'),
         '#value_callback' => 'blockreference_autocomplete_value',

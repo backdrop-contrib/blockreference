@@ -28,24 +28,34 @@ function blockreference_menu() {
  * Access callback for the autocomplete path.
  */
 function blockreference_autocomplete_access($entity_type, $bundle, $field_name, $eid) {
-  if ($eid == 0) {
-    $entity_info = entity_get_info($entity_type);
-    $entity_dummy = entity_create($entity_type, array(
-      $entity_info['entity keys']['bundle'] => $bundle,
-    ));
-
-    global $user;
-    $entity_access = $entity_dummy->access('create', $user);
+  // The autocomplete access check will fail for paragraph based blockreference
+  // fields unless the 'paragraphs_bundle_permissions' module is enabled. If
+  // it isn't enabled, then the user will have access whether creating or
+  // updating, so we can give access to autocomplete.
+  if ($entity_type == 'paragraphs_item' && !module_exists('paragraphs_bundle_permissions')) {
+    return TRUE;
   }
   else {
-    $entities = entity_load($entity_type, array($eid));
-    $entity = reset($entities) ?: FALSE;
+    // If it isn't a paragraph or if the 'paragraphs_bundle_permissions' is
+    // enabled, then we proceed with existing checks.
+    if ($eid == 0) {
+      $entity_info = entity_get_info($entity_type);
+      $entity_dummy = entity_create($entity_type, array(
+        $entity_info['entity keys']['bundle'] => $bundle,
+      ));
 
-    global $user;
-    $entity_access = $entity->access('update', $user);
+      global $user;
+      $entity_access = $entity_dummy->access('create', $user);
+    }
+    else {
+      $entities = entity_load($entity_type, array($eid));
+      $entity = reset($entities) ?: FALSE;
+
+      global $user;
+      $entity_access = $entity->access('update', $user);
+    }
+    return user_access('access content') && $entity_access;
   }
-
-  return user_access('access content') && $entity_access;
 }
 
 /**
