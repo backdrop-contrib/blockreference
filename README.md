@@ -14,7 +14,7 @@ taxonomy_term, etc.)
 
 Theming
 -------
-To assist in themeing blocks that are displayed using the block reference
+To assist in theming blocks that are displayed using the block reference
 module, the block reference element is available in the $variables array in
 template_preprocess_block().
 
@@ -28,11 +28,6 @@ should first check the existence of the element before using its contents.
 Notes
 -----
 - Relationships are saved using the block's `delta` + `module`.
-- Block configuration visibility settings are respected.
-  If a referenced block does not appear when viewing a node, check
-  the block's visibility settings on /admin/structure/block.
-  Note that visibility settings are evaluated regardless of whether
-  the block is assigned to a region.
 
 Issues
 ------
@@ -42,6 +37,7 @@ https://github.com/backdrop-contrib/blockreference/issues
 Current Maintainers
 -------------------
 - [Martin Price](https://github.com/yorkshire-pudding) - [System Horizons](https://www.systemhorizons.co.uk)
+- Collaboration and co-maintainers welcome!
 
 Credits
 -------
