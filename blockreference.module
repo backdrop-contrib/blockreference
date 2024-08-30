@@ -6,7 +6,7 @@
 
 define('BLOCKREFERENCE_AC_REGEX', '#\[([\w\-]+):([\w\-]+)\]$#');
 
-require __DIR__ . '/blockreference.field.inc';
+require_once __DIR__ . '/blockreference.field.inc';
 
 /**
  * Implements hook_menu().
@@ -469,7 +469,7 @@ function blockreference_entity_view($entity, $entity_type, $view_mode, $langcode
     return;
   }
 
-  foreach (element_children($entity->content) as $field_name){
+  foreach (element_children($entity->content) as $field_name) {
     $field = $entity->content[$field_name];
 
     // This is a blockreference field.
