@@ -188,7 +188,10 @@ function blockreference_field_formatter_view($entity_type, $entity, $field, $ins
     // immediately and check the output.
     if (!$display['settings']['show_empty_blocks']) {
       $html = trim(render($element[$delta]));
-      if ($html) {
+      // To check if the block is actually empty we need to test a copy of $html
+      // with all tags stripped.
+      $html_content = trim(strip_tags($html));
+      if (!empty($html_content)) {
         $element[$delta] = array(
           '#markup' => $html,
           '#blockreference_vars' => $vars,
